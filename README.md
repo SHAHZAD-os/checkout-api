@@ -1,61 +1,280 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+E-commerce API Project
+This is a Laravel-based RESTful API for an e-commerce system, featuring user authentication, cart management, product retrieval, order creation, and payment processing with Stripe integration.
+Setup and Installation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Clone the Repository
+git clone <https://github.com/SHAHZAD-os/checkout-api>
+cd <checkout-api>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Install DependenciesEnsure you have PHP, Composer, and a database (e.g., MySQL) installed. Then run:
+composer install
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Environment Configuration
 
-## Learning Laravel
+Copy the .env.example file to .env:cp .env.example .env
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Update .env with your database credentials and Stripe API keys:DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+STRIPE_KEY=your_stripe_publishable_key
+STRIPE_SECRET=your_stripe_secret_key
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Generate Application Key
+php artisan key:generate
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Run MigrationsSet up the database schema:
+php artisan migrate
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Seed the DatabasePopulate the database with initial data, including a test user and sample products:
+php artisan db:seed
 
-## Security Vulnerabilities
+This will create:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+A test user with credentials:
+Email: test@example.com
+Password: password123
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Sample products (e.g., Laptop, Smartphone, Headphones, etc.) with predefined prices and stock.
+
+
+Install JWT AuthenticationInstall and configure JWTAuth:
+composer require tymon/jwt-auth
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+
+
+Start the Development Server
+php artisan serve
+
+The API will be accessible at http://localhost:8000.
+
+
+API Endpoints
+Below are the available API endpoints with example requests. All endpoints requiring authentication use JWT tokens in the Authorization: Bearer <token> header. All routes are defined in the respective route files (routes/apis/auth.php, routes/apis/cart.php, routes/apis/order.php, routes/apis/payment.php, routes/apis/product.php) and included in the main api.php file.
+Authentication (routes/apis/auth.php)
+
+POST /api/login
+
+Log in a user and return a JWT token.
+Request:{
+    "email": "test@example.com",
+    "password": "password123"
+}
+
+
+Response (success):{
+    "success": true,
+    "data": { "token": "<jwt-token>" },
+    "message": "Login successful"
+}
+
+
+
+
+POST /api/logout (Authenticated)
+
+Log out the user and invalidate the token.
+Response:{
+    "success": true,
+    "data": [],
+    "message": "Logout successful"
+}
+
+
+
+
+GET /api/login-duration (Authenticated)
+
+Get the duration of the current login session.
+Response:{
+    "success": true,
+    "data": { "login_duration": "0 hours 5 minutes 30 seconds" },
+    "message": "Login duration calculated"
+}
+
+
+
+
+GET /api/online-duration (Authenticated)
+
+Get the total online duration across all sessions.
+Response:{
+    "success": true,
+    "data": { "online_duration": "2 hours 15 minutes 45 seconds" },
+    "message": "Online duration calculated"
+}
+
+
+
+
+
+Products (routes/apis/product.php)
+
+GET /api/products
+Retrieve all products (e.g., Laptop, Smartphone, Headphones, etc.).
+Response:{
+    "success": true,
+    "data": [
+        { "id": 1, "name": "Laptop", "price": 999.99, "stock": 50 },
+        { "id": 2, "name": "Smartphone", "price": 699.99, "stock": 100 },
+        ...
+    ],
+    "message": "Products retrieved successfully"
+}
+
+
+
+
+
+Cart (routes/apis/cart.php)
+
+GET /api/cart (Authenticated)
+
+View the user's cart.
+Response:{
+    "success": true,
+    "data": [
+        { "id": 1, "user_id": 1, "product_id": 1, "quantity": 2, "product": { "id": 1, "name": "Laptop", "price": 999.99, "stock": 48 } },
+        ...
+    ],
+    "message": "Cart retrieved successfully"
+}
+
+
+
+
+POST /api/cart/add (Authenticated)
+
+Add items to the cart.
+Request:{
+    "items": [
+        { "product_id": 1, "quantity": 2 },
+        { "product_id": 2, "quantity": 1 }
+    ]
+}
+
+
+Response:{
+    "success": true,
+    "data": [],
+    "message": "Items added to cart"
+}
+
+
+
+
+DELETE /api/cart/remove/{id} (Authenticated)
+
+Remove a specific item from the cart.
+Response:{
+    "success": true,
+    "data": [],
+    "message": "Item removed from cart"
+}
+
+
+
+
+DELETE /api/cart/clear (Authenticated)
+
+Clear all items from the cart.
+Response:{
+    "success": true,
+    "data": [],
+    "message": "Cart cleared successfully"
+}
+
+
+
+
+
+Order (routes/apis/order.php)
+
+POST /api/order (Authenticated)
+Create an order from the cart.
+Request:{
+    "payment_method": "card"
+}
+
+
+Response:{
+    "success": true,
+    "data": {
+        "order_id": 1,
+        "total_amount": 1999.97,
+        "items": [
+            { "product_id": 1, "name": "Laptop", "quantity": 2, "price": 999.99 },
+            ...
+        ]
+    },
+    "message": "Order created successfully",
+    "status": 201
+}
+
+
+
+
+
+Payment (routes/apis/payment.php)
+
+POST /api/payment (Authenticated)
+Process payment for an order.
+Request:{
+    "order_id": 1,
+    "payment_method": "card",
+    "stripe_token": "tok_visa"
+}
+
+
+Response:{
+    "success": true,
+    "data": {
+        "payment_id": 1,
+        "order_id": 1,
+        "amount": 1999.97,
+        "transaction_id": "txn_123456"
+    },
+    "message": "Payment processed successfully",
+    "status": 201
+}
+
+
+
+
+
+Testing with Stripe
+To test Stripe payments:
+
+Use Stripe's test keys (available from your Stripe dashboard).
+Use test card details, such as:
+Card Number: 4242 4242 4242 4242
+Expiry: Any future date
+CVC: Any 3-digit number
+Token: Use tok_visa for testing (generated via Stripe's API or client-side library).
+
+
+Ensure the STRIPE_SECRET is set in your .env file.
+Test the /api/payment endpoint with the above request format. Stripe's test mode will not charge real cards.
+
+Notes
+
+Ensure a MySQL database is configured and running before migrations.
+The API uses JWT for authentication, so include the token in the Authorization header for protected routes.
+All responses follow a consistent format with success, data, message, and optional status fields.
+The database seeder creates a test user (test@example.com, password123) and sample products for testing.
+For production, configure HTTPS and secure your .env file properly.
+Monitor Stripe API rate limits to avoid 429 Too Many Requests errors.
+All routes are prefixed with /api/ as they are defined in the routes/api.php file and its included route files.
