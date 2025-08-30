@@ -142,6 +142,7 @@ Request:
 { "order_id": 1, "payment_method": "card" }
 ```
 
+
 Response:
 
 ```json
