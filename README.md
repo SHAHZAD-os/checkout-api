@@ -134,7 +134,7 @@ Response:
 
 ## Payments
 
-### POST `/api/payment` (Auth)
+### POST `/api/payment/` (Auth)
 
 Request:
 
