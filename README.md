@@ -139,7 +139,7 @@ Response:
 Request:
 
 ```json
-{ "order_id": 1, "payment_method": "card", "stripe_token": "tok_visa" }
+{ "order_id": 1, "payment_method": "card" }
 ```
 
 Response:
