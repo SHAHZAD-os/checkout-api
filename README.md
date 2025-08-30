@@ -254,7 +254,3 @@ For production, use HTTPS and secure .env.
 
 All API routes are prefixed with /api/.
 
-
-You can **copy everything from the first ```markdown to the last ```** and paste it into your `README.md` file.  
-
-If you want, I can also make a **fully compact one-screen version** that avoids scrolling in GitHub README. Do you want me to do that?
