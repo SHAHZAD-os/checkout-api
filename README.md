@@ -80,7 +80,7 @@ Response:
 
 ## Cart
 
-### GET `/api/cart` (Auth)
+### GET `/api/cart/` (Auth)
 
 ```json
 { "success": true, "data": [ { "id": 1, "user_id": 1, "product_id": 1, "quantity": 2 } ], "message": "Cart retrieved successfully" }
@@ -116,7 +116,7 @@ Response:
 
 ## Orders
 
-### POST `/api/order` (Auth)
+### POST `/api/order/` (Auth)
 
 Request:
 
