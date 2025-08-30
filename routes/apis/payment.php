@@ -8,4 +8,5 @@ Route::prefix('payment')
     ->controller(PaymentController::class)
     ->group(function () {
         Route::post('/', 'processPayment');
+        Route::post('/create-checkout-session', 'createCheckoutSession');
     });

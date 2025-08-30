@@ -19,7 +19,6 @@ class PaymentRequest extends FormRequest
         return [
             'order_id' => 'required|exists:orders,id',
             'payment_method' => 'required|in:cash,card',
-            'stripe_token' => 'required_if:payment_method,card|string', 
         ];
     }
      protected function failedValidation(Validator $validator)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,3 +15,11 @@ Route::get('/logs', function () {
         'Content-Type' => 'text/plain',
     ]);
 });
+
+
+Route::prefix('payment')
+    ->controller(PaymentController::class)
+    ->group(function () {
+        Route::get('/success', 'handleSuccess');
+        Route::get('/cancel', 'handleCancel'); 
+    });
